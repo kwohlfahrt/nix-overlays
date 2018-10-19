@@ -1,9 +1,9 @@
 self: super: {
   python3 = super.python3.override {
     packageOverrides = self: super: {
-      dotmap = self.callPackage ./dotmap.nix {};
-      tensorboardX = self.callPackage ./tensorboardX.nix {};
-      hyperopt = self.callPackage ./hyperopt.nix {};
+      dotmap = super.callPackage ./dotmap.nix {};
+      tensorboardX = super.callPackage ./tensorboardX.nix {};
+      hyperopt = super.callPackage ./hyperopt.nix {};
     };
   };
 }

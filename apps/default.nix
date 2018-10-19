@@ -1,3 +1,3 @@
 self: super: {
-  gomod2nix = self.callPackage ./gomod2nix.nix {};
+  gomod2nix = super.callPackage ./gomod2nix.nix {};
 }
