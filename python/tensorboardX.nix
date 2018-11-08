@@ -1,16 +1,23 @@
-{ buildPythonPackage, fetchPypi, numpy, protobuf, six, pytest, matplotlib }:
+{ buildPythonPackage, fetchgit, numpy, protobuf, six, pytest, matplotlib, pytorch, torchvision, flake8 }:
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "tensorboardX";
   version = "1.4";
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1bkg9c1sscy9sxx3np2zzw8vzrdgqippjl1claz4177vr0jjikxs";
+  # tests are not packaged on pypi
+  src = fetchgit {
+    url = "https://github.com/lanpa/tensorboardX.git";
+    # No git tag for v1.4, see github issue #221
+    rev = "6a80f7b7afece5cebaceb5985217478129e6aa5b";
+    sha256 = "0378k95pb6nymamszwrjgh6bv9bf3x7xj4fqg7rj3fcy43bgjd77";
   };
 
   propagatedBuildInputs = [ numpy protobuf six ];
-  checkInputs = [ pytest matplotlib ];
+  checkInputs = [ pytest matplotlib pytorch torchvision flake8 ];
 
-  doCheck = false; # FIXME
+  checkPhase = ''
+    flake8 tensorboardX/
+    # test_test makes HTTP requests
+    pytest -k "not test_test"
+  '';
 }
