@@ -8,6 +8,7 @@ in {
     dotmap = super.callPackage ./dotmap.nix {};
     tensorboardX = super.callPackage ./tensorboardX.nix {};
     hyperopt = super.callPackage ./hyperopt.nix {};
+    yacs = super.callPackage ./yacs.nix {};
   }) (super.pythonOverrides or empty);
 
   python3 = super.python3.override {
