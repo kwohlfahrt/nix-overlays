@@ -1,0 +1,14 @@
+diff --git a/External/AvalonTools/CMakeLists.txt b/External/AvalonTools/CMakeLists.txt
+index f48caed4..c2c29f7e 100755
+--- a/External/AvalonTools/CMakeLists.txt
++++ b/External/AvalonTools/CMakeLists.txt
+@@ -84,6 +84,9 @@ endif()
+       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-parentheses -Wno-logical-op-parentheses -Wno-dangling-else -Wno-format")
+      endif()
+ 
++if (NOT MSVC)
++      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=format-security")
++endif()
+ 
+ rdkit_library(avalon_clib ${avalon_clib_srcs})
+ if((MSVC AND RDK_INSTALL_DLLS_MSVC) OR ((NOT MSVC) AND WIN32))
