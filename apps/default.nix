@@ -3,4 +3,5 @@ self: super: {
   oath = super.callPackage ./oath.nix {};
   vipaccess = super.callPackage ./vipaccess.nix {};
   dyndns = super.callPackage ./dyndns.nix {};
+  plz-cli = super.callPackage ./plz-cli.nix {};
 }
