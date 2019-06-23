@@ -4,6 +4,6 @@
 let
   src = builtins.fetchGit {
     url = "https://github.com/kwohlfahrt/dyndns.git";
-    rev = "2f57c05b54dec8fe98cddfd81c125d4e2b20918b";
+    rev = "ecb5fc1f7453688add410310853bb01eced35f3d";
   };
 in callPackage (import "${src}/dyndns.nix") {}
