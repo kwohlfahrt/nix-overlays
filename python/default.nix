@@ -11,6 +11,7 @@ in {
     yacs = super.callPackage ./yacs.nix {};
     glob2 = super.callPackage ./glob2.nix {};
     rdkit = self.toPythonModule (super.callPackage ./rdkit {});
+    tiffutil = super.callPackage ./tiffutil.nix {};
   }) (super.pythonOverrides or empty);
 
   python3 = super.python3.override {
