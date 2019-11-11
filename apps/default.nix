@@ -3,6 +3,7 @@ self: super: {
   oath = super.callPackage ./oath.nix {};
   vipaccess = super.callPackage ./vipaccess.nix {};
   dyndns = super.callPackage ./dyndns.nix {};
+  pimostat = super.callPackage ./pimostat.nix {};
   plz-cli = super.callPackage ./plz-cli.nix {};
   dtc_git = super.dtc.overrideAttrs (o: rec {
     version = "git";
