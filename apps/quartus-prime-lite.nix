@@ -1,4 +1,6 @@
-{ stdenv, lib, requireFile, unstick, file, freetype, fontconfig, glib, xorg, zlib, cycloneVSupport ? true }:
+{ stdenv, lib, requireFile, makeWrapper,
+  unstick, file, freetype, fontconfig, glib, xorg, zlib,
+  cycloneVSupport ? true }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
@@ -43,7 +45,7 @@ in stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ unstick file ];
+  nativeBuildInputs = [ unstick file makeWrapper ];
 
   installPhase = let
     installer = builtins.head src;
@@ -83,6 +85,12 @@ in stdenv.mkDerivation rec {
           --set-rpath $out/quartus/linux64:${libPath} $f
       fi
     done
+
+    mkdir -p $out/share
+    mv $out/licenses $out/share
+
+    mkdir -p $out/bin
+    makeWrapper $out/quartus/bin/quartus $out/bin/quartus
   '';
 
   meta = {
