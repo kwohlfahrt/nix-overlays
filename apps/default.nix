@@ -1,6 +1,6 @@
 self: super: {
   gomod2nix = super.callPackage ./gomod2nix.nix {};
-  quartus-prime-lite = super.callPackage ./quartus-prime-lite.nix {};
+  quartus-prime-lite = super.callPackage ./quartus-prime-lite {};
   oath = super.callPackage ./oath.nix {};
   vipaccess = super.callPackage ./vipaccess.nix {};
   dyndns = super.callPackage ./dyndns.nix {};
