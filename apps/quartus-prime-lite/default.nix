@@ -1,4 +1,4 @@
-{ buildFHSUserEnv, stdenv, lib, requireFile, unstick, cycloneVSupport ? true }:
+{ buildFHSUserEnv, makeDesktopItem, stdenv, lib, requireFile, unstick, cycloneVSupport ? true }:
 
 let
   quartus = stdenv.mkDerivation rec {
@@ -77,6 +77,15 @@ let
     };
   };
 
+  desktopItem = makeDesktopItem {
+    name = quartus.name;
+    exec = "quartus";
+    icon = "quartus";
+    desktopName = "Quartus";
+    genericName = "Quartus FPGA IDE";
+    categories = "Development;";
+  };
+
 # I think modelsim_ase/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
 in buildFHSUserEnv {
   name = "quartus";
@@ -102,6 +111,11 @@ in buildFHSUserEnv {
     xorg.libXext
     xorg.libXrender
   ];
+
+  extraInstallCommands = ''
+    mkdir -p $out/share/applications
+    cp ${desktopItem}/share/applications/* $out/share/applications
+  '';
 
   runScript = "${quartus}/quartus/bin/quartus";
 }
