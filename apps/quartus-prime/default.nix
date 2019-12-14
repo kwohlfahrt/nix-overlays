@@ -3,7 +3,7 @@
 let
   quartus = stdenv.mkDerivation rec {
     version = "19.1.0.670";
-    pname = "quartus-prime-lite";
+    pname = "quartus-prime";
 
     src = let
       require = {name, sha256}: requireFile {
@@ -37,11 +37,11 @@ let
       installers = lib.sublist 0 2 src;
       components = lib.sublist 2 ((lib.length src) - 2) src;
       copyInstaller = installer: ''
-      # `$(cat $NIX_CC/nix-support/dynamic-linker) $src[0]` often segfaults, so cp + patchelf
-      cp ${installer} $TEMP/${installer.name}
-      chmod u+w,+x $TEMP/${installer.name}
-      patchelf --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $TEMP/${installer.name}
-    '';
+        # `$(cat $NIX_CC/nix-support/dynamic-linker) $src[0]` often segfaults, so cp + patchelf
+        cp ${installer} $TEMP/${installer.name}
+        chmod u+w,+x $TEMP/${installer.name}
+        patchelf --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $TEMP/${installer.name}
+      '';
       copyComponent = component: "cp ${component} $TEMP/${component.name}";
       # leaves enabled: quartus, modelsim_ase, devinfo
       disabledComponents = [
@@ -70,7 +70,7 @@ let
   '';
 
     meta = {
-      homepage = https://fpgasoftware.intel.com;
+      homepage = "https://fpgasoftware.intel.com";
       description = "FPGA design and simulation software";
       license = lib.licenses.unfree;
       platforms = lib.platforms.linux;
