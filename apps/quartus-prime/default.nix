@@ -91,12 +91,14 @@ in buildFHSUserEnv {
   name = "quartus";
 
   targetPkgs = pkgs: with pkgs; [
-    quartus
     # quartus requirements
     glib
     xorg.libICE
     xorg.libSM
     zlib
+    # qsys requirements
+    xorg.libXtst
+    xorg.libXi
   ];
   multiPkgs = pkgs: with pkgs; [
     # modelsim requirements
