@@ -8,17 +8,7 @@ let
     src = let
       require = {name, sha256}: requireFile {
         inherit name sha256;
-
-        message = ''
-          This nix expression requires that ${name} is already part of the store.
-          Download it from ${meta.homepage} and add it to the nix store with:
-
-              nix-prefetch-url <URL>
-
-          This can't be done automatically because you need to create an account on
-          their website and agree to their license terms before you can download
-          it. That's what you get for using proprietary software.
-        '';
+        url = meta.homepage;
       };
     in map require ([{
       name = "QuartusLiteSetup-${version}-linux.run";
@@ -100,12 +90,17 @@ in buildFHSUserEnv {
     xorg.libXtst
     xorg.libXi
   ];
-  multiPkgs = pkgs: with pkgs; [
+  multiPkgs = pkgs: with pkgs; let
+    # This seems ugly - can we override `libpng = libpng12` for all `pkgs`?
+    freetype = pkgs.freetype.override { libpng = libpng12; };
+    fontconfig = pkgs.fontconfig.override { inherit freetype; };
+    libXft = pkgs.xorg.libXft.override { inherit freetype fontconfig; };
+  in [
     # modelsim requirements
     libxml2
     ncurses5
     unixODBC
-    xorg.libXft
+    libXft
     # common requirements
     freetype
     fontconfig
