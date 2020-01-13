@@ -4,6 +4,6 @@
 let
   src = builtins.fetchGit {
     url = "https://github.com/kwohlfahrt/unstick.git";
-    rev = "5691ace9d210f506571bb1312ffca79216e4dfff";
+    rev = "effee9aa242ca12dc94cc6e96bc073f4cc9e8657";
   };
 in callPackage (import "${src}/unstick.nix") {}
