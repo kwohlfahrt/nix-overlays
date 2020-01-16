@@ -4,6 +4,6 @@
 let
   src = builtins.fetchGit {
     url = "https://github.com/kwohlfahrt/pimostat.git";
-    rev = "6dbab5e4a0eb8b7d8bd012ebd33997e487baab20";
+    rev = "8657232b2f1d20e5759f415c180092558e35ad86";
   };
 in callPackage (import "${src}/pimostat.nix") {}
