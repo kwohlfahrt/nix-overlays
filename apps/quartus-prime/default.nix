@@ -25,7 +25,7 @@ let
 
   quartus = stdenv.mkDerivation rec {
     version = "19.1.0.670";
-    pname = "quartus-prime-lite";
+    pname = "quartus-prime-lite-unwrapped";
 
     src = let
       require = {name, sha256}: requireFile {
@@ -92,21 +92,22 @@ let
       description = "FPGA design and simulation software";
       license = lib.licenses.unfree;
       platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ kwohlfahrt ];
     };
   };
 
   desktopItem = makeDesktopItem {
-    name = quartus.name;
+    name = "quartus-prime-lite";
     exec = "quartus";
     icon = "quartus";
     desktopName = "Quartus";
-    genericName = "Quartus FPGA IDE";
+    genericName = "Quartus Prime";
     categories = "Development;";
   };
 
 # I think modelsim_ase/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
 in buildFHSUserEnv rec {
-  name = "quartus-wrapper";
+  name = "quartus-prime-lite"; # wrapped
 
   targetPkgs = pkgs: with pkgs; [
     # quartus requirements
@@ -138,7 +139,7 @@ in buildFHSUserEnv rec {
   ];
 
   passthru = {
-    inherit quartus;
+    unwrapped = quartus;
   };
 
   extraInstallCommands = let
@@ -147,19 +148,21 @@ in buildFHSUserEnv rec {
       "sh" "si" "sim" "sta" "stp" "tan"
     ]) ++ [ "quartus/bin/quartus" ];
 
-    qsysExecutables = (map (c: "quartus/sopc_builder/bin/qsys-${c}") [
+    qsysExecutables = map (c: "quartus/sopc_builder/bin/qsys-${c}") [
       "generate" "edit" "script"
-    ]);
+    ];
+    # Should we install all executables ?
+    modelsimExecutables = map (c: "modelsim_ase/bin/${c}") [
+      "vsim" "vlog" "vlib"
+    ];
   in ''
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
+    mkdir -p $out/share/applications $out/share/icons/128x128
+    ln -s ${desktopItem}/share/applications/* $out/share/applications
+    ln -s ${quartus}/licenses/images/dc_quartus_panel_logo.png $out/share/icons/128x128/quartus.png
 
-    mkdir -p $out/quartus/bin
-    mkdir -p $out/quartus/sopc_builder/bin
-
+    mkdir -p $out/quartus/bin $out/quartus/sopc_builder/bin $out/modelsim_ase/bin
     WRAPPER=$out/bin/${name}
-    EXECUTABLES="${lib.concatStringsSep " " (quartusExecutables ++ qsysExecutables)}"
-
+    EXECUTABLES="${lib.concatStringsSep " " (quartusExecutables ++ qsysExecutables ++ modelsimExecutables)}"
     for executable in $EXECUTABLES; do
         echo "#!${stdenv.shell}" >> $out/$executable
         echo "$WRAPPER ${quartus}/$executable \$@" >> $out/$executable
@@ -167,6 +170,7 @@ in buildFHSUserEnv rec {
 
     cd $out
     chmod +x $EXECUTABLES
+    # link into $out/bin so executables become available on $PATH
     ln --symbolic --relative --target-directory ./bin $EXECUTABLES
   '';
 
