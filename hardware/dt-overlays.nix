@@ -2,6 +2,6 @@
 let
   src = builtins.fetchGit {
     url = "https://github.com/kwohlfahrt/dt-overlays.git";
-    rev = "9e3749d1bd3dbda3a54c1206954018819b0a2312";
+    rev = "8369f0f04f83a56bf9fec04e6a411c2e55165754";
   };
 in import "${src}/dt-overlays.nix"
