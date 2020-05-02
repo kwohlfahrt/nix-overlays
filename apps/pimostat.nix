@@ -3,7 +3,7 @@
 # I expect this to be a common pattern, might need factoring out
 let
   src = builtins.fetchGit {
-    url = "https://github.com/kwohlfahrt/pimostat.git";
-    rev = "03759f9468f01845e61a5a50fef12b73c3c067c0";
+    url = "https://pi.home/git/pimostat.git";
+    rev = "1765436e401751e94dac8683927a89473a27584f";
   };
 in callPackage (import "${src}/pimostat.nix") {}
