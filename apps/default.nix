@@ -55,7 +55,7 @@ self: super: {
                    my $fingerprint = fingerprintPath($storePath, $narHash, $narSize, $refs);
                    my $sig = signString($secretKey, $fingerprint);
                    $res .= "Sig: $sig\n";
-      +        } elsif (defined $sigs) {
+      +        } elsif (defined $sigs && @$sigs) {
       +            $res .= join("\n", map { "Sig: $_" } @$sigs) . "\n";
                }
                return [200, ['Content-Type' => 'text/x-nix-narinfo'], [$res]];
