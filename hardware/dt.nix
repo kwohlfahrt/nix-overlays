@@ -1,7 +1,7 @@
 self: super: let
   src = builtins.fetchGit {
     url = "https://github.com/kwohlfahrt/dt-overlays.git";
-    rev = "d922be1a7bf4db1975b93cfc81c8cfc9ee7a52d5";
+    rev = "3d97c215d337a9dc0dfbcabafdedcd6f13bc658a";
   };
 in {
   dt-overlays = super.callPackage (import "${src}/dt-overlays.nix") {};
