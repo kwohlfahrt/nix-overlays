@@ -6,35 +6,6 @@ self: super: {
   unstick = super.callPackage ./unstick.nix {};
   pimostat = super.callPackage ./pimostat.nix {};
   plz-cli = super.callPackage ./plz-cli.nix {};
-  nix = super.nix.overrideAttrs (o: {
-    passthru.perl-bindings = o.passthru.perl-bindings.overrideAttrs (o: {
-      patches = [(super.writeText "perl-sigs.patch" ''
-        diff --git a/lib/Nix/Store.xs b/lib/Nix/Store.xs
-        index ce553bb53..e76d71cef 100644
-        --- a/lib/Nix/Store.xs
-        +++ b/lib/Nix/Store.xs
-        @@ -111,10 +111,14 @@ SV * queryPathInfo(char * path, int base32)
-                     XPUSHs(sv_2mortal(newSVpv(s.c_str(), 0)));
-                     mXPUSHi(info->registrationTime);
-                     mXPUSHi(info->narSize);
-        -            AV * arr = newAV();
-        -            for (PathSet::iterator i = info->references.begin(); i != info->references.end(); ++i)
-        -                av_push(arr, newSVpv(i->c_str(), 0));
-        -            XPUSHs(sv_2mortal(newRV((SV *) arr)));
-        +            AV * refs = newAV();
-        +            for (auto & i : info->references)
-        +                av_push(refs, newSVpv(i.c_str(), 0));
-        +            XPUSHs(sv_2mortal(newRV((SV *) refs)));
-        +            AV * sigs = newAV();
-        +            for (auto & i : info->sigs)
-        +                av_push(sigs, newSVpv(i.c_str(), 0));
-        +            XPUSHs(sv_2mortal(newRV((SV *) sigs)));
-                 } catch (Error & e) {
-                     croak("%s", e.what());
-                 }
-      '')];
-    });
-  });
   nix-serve = super.nix-serve.overrideAttrs (o: {
     patches = [(super.writeText "sigs.patch" ''
       diff --git a/nix-serve.psgi b/nix-serve.psgi
