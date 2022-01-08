@@ -4,7 +4,6 @@ self: super: {
   vipaccess = super.callPackage ./vipaccess.nix {};
   dyndns = super.callPackage ./dyndns.nix {};
   unstick = super.callPackage ./unstick.nix {};
-  pimostat = super.callPackage ./pimostat.nix {};
   plz-cli = super.callPackage ./plz-cli.nix {};
   nix-serve = super.nix-serve.overrideAttrs (o: {
     patches = [(super.writeText "sigs.patch" ''
