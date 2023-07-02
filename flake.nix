@@ -5,7 +5,7 @@
     lib = import ./lib;
     overlay = self: super: let
       libOverlay = self: super: { lib = super.lib // (import ./lib); };
-      pkgOverlays = (map import [ ./python ./apps ./hardware ./ruby ]);
+      pkgOverlays = (map import [ ./python ./apps ./ruby ]);
     in (super.lib.foldl' super.lib.composeExtensions libOverlay pkgOverlays) self super;
   };
 }
