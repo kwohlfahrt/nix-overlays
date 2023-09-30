@@ -2,8 +2,6 @@ self: super: {
   gomod2nix = super.callPackage ./gomod2nix.nix {};
   oath = super.callPackage ./oath.nix {};
   vipaccess = super.callPackage ./vipaccess.nix {};
-  unstick = super.callPackage ./unstick.nix {};
-  plz-cli = super.callPackage ./plz-cli.nix {};
   nix-serve = super.nix-serve.overrideAttrs (o: {
     patches = [(super.writeText "sigs.patch" ''
       diff --git a/nix-serve.psgi b/nix-serve.psgi
